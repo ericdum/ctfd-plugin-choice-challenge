@@ -1,0 +1,20 @@
+{% extends "admin/challenges/create.html" %}
+
+{% block header %}
+    <div class="alert alert-secondary" role="alert">
+        Use following syntax to represent your options in the Message Field:
+
+        <pre>
+        - () Option 1
+        - () Option 2
+        - () ....
+        </pre>
+    </div>
+    <div class="alert alert-warning">
+        Remember to set up the max attempts option
+    </div>
+{% endblock %}
+
+{% block type %}
+	<input type="hidden" name="type" value="choice" >
+{% endblock %}
