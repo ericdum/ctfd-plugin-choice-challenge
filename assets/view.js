@@ -6,7 +6,6 @@ CTFd._internal.challenge.preRender = function() {
 CTFd._internal.challenge.postRender = function() {
   setTimeout(()=>{
     document.querySelectorAll(".challenge-desc li").forEach((el, index)=>{
-      debugger
       radio = el.innerText.match(/^\(\s*\)\s*(.*)$/)
       checkbox = el.innerText.match(/^\[\s*\]\s*(.*)$/)
       letters = "ABCDEFGHIJKLMN"
