@@ -1,7 +1,7 @@
 # ctfd-plugin-choice-challenge
 
-This plugin is attended to set up single choice or multi choice quesiton (TODO)
-![img.png](img.png)
+This plugin is attended to set up single choice or multi choice quesiton, for [CTFd](https://github.com/CTFd/CTFd/blob).
+![img.png](img.png) 
 
 ### Quickstart
 
