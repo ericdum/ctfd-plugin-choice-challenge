@@ -5,10 +5,11 @@ CTFd._internal.challenge.preRender = function() {
 
 CTFd._internal.challenge.postRender = function() {
   setTimeout(()=>{
+    document.querySelector(".challenge-desc ul").setAttribute("x-init",'submission=[]')
     document.querySelectorAll(".challenge-desc li").forEach((el, index)=>{
       radio = el.innerText.match(/^\(\s*\)\s*(.*)$/)
       checkbox = el.innerText.match(/^\[\s*\]\s*(.*)$/)
-      letters = "ABCDEFGHIJKLMN"
+      letters = "ABCDEFGHIJKLMNOPQRST"
       if (radio) {
         el.innerHTML = "<input class=\"form-check-input\" " +
             "type=\"radio\" " +
@@ -23,6 +24,7 @@ CTFd._internal.challenge.postRender = function() {
         // TODO: some thing wrong, the checkbox checks all automatically.
         el.innerHTML = "<input class=\"form-check-input\" " +
             "type=\"checkbox\" " +
+            "name=\"submission\"" +
             "x-model=\"submission\" " +
             "id=\"option_"+ index +"\" " +
             "value=\""+ letters[index] +"\">" +
@@ -35,4 +37,5 @@ CTFd._internal.challenge.postRender = function() {
       el.className = "form-check"
     })
   },200);
+  // document.querySelector("#challenge-submit").onclick = CTFd._internal.challenge.submit
 };

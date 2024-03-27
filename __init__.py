@@ -6,6 +6,7 @@ from CTFd.plugins.challenges import CHALLENGE_CLASSES, BaseChallenge
 from CTFd.plugins.flags import FlagException, get_flag_class
 from CTFd.plugins.dynamic_challenges.decay import DECAY_FUNCTIONS, logarithmic
 from CTFd.plugins.migrations import upgrade
+import json
 
 class ChoiceChallengeModel(Challenges):
 
@@ -36,6 +37,43 @@ class ChoiceChallenge(BaseChallenge):
     )
     challenge_model = ChoiceChallengeModel
 
+    @classmethod
+    def calc_attemp(self, challenge, request):
+        data = request.form or request.get_json()
+        submission = [data["submission"].strip()] if isinstance(data["submission"], str) else data["submission"]
+        flags = Flags.query.filter_by(challenge_id=challenge.id).all()
+        total = len(flags)
+        correct = 0
+        wrong = 0
+        for sub in submission:
+            try:
+                found = False
+                for flag in flags:
+                    if get_flag_class(flag.type).compare(flag, sub):
+                        found = True
+                if found:
+                    correct += 1
+                else:
+                    wrong += 1
+            except FlagException as e:
+                return False, str(e)
+        return (total, correct, wrong)
+
+    @classmethod
+    def attempt(cls, challenge, request):
+        (total, correct, wrong) = cls.calc_attemp(challenge, request)
+        if wrong == 0 and correct == total:
+            return True, 'Correct'
+        return False, f"Incorrect ({wrong}), Correct ({correct}), Missing({total-correct})"
+
+    # @classmethod
+    # def solve(cls, user, team, challenge, request):
+    #     super().solve(user, team, challenge, request)
+    #
+    #     (total, correct, wrong) = cls.calc_attemp(challenge, request)
+    #
+    #     challenge.value = challenge.value * (correct-wrong)/total
+    #     db.session.commit()
 
 def load(app):
     app.db.create_all()
