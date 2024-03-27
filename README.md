@@ -3,6 +3,10 @@
 This plugin is attended to set up single choice or multi choice quesiton, for [CTFd](https://github.com/CTFd/CTFd/blob).
 ![img.png](img.png) 
 
+### IMPORTANT NOTICE:
+
+This plugin refer to https://github.com/ericdum/CTFd until it's merge to the main repository of CTFd/CTFd
+
 ### Quickstart
 
 1. Clone this repository to your {root of CTFd}/CTFd/plugins
