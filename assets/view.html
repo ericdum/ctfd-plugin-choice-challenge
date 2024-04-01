@@ -1,6 +1,9 @@
 {% extends "challenge.html" %}
 
-{% block description %}{{ challenge.html }}{% endblock %}
+
+{% block description %}
+    {{ challenge.html }}
+{% endblock %}
 
 {% block input %}
     <input id="challenge-id" class="challenge-id" type="hidden" value="{{ challenge.id }}">

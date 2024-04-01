@@ -9,6 +9,11 @@ from CTFd.plugins.migrations import upgrade
 import json
 
 class ChoiceChallengeModel(Challenges):
+    __mapper_args__ = {"polymorphic_identity": "choice"}
+
+    id = db.Column(
+        db.Integer, db.ForeignKey("challenges.id", ondelete="CASCADE"), primary_key=True
+    )
 
     def __init__(self, *args, **kwargs):
         super(ChoiceChallengeModel, self).__init__(**kwargs)

@@ -5,36 +5,48 @@ CTFd._internal.challenge.preRender = function() {
 
 CTFd._internal.challenge.postRender = function() {
   setTimeout(()=>{
-    document.querySelector(".challenge-desc ul").setAttribute("x-init",'submission=[]')
-    document.querySelectorAll(".challenge-desc li").forEach((el, index)=>{
-      radio = el.innerText.match(/^\(\s*\)\s*(.*)$/)
-      checkbox = el.innerText.match(/^\[\s*\]\s*(.*)$/)
-      letters = "ABCDEFGHIJKLMNOPQRST"
-      if (radio) {
-        el.innerHTML = "<input class=\"form-check-input\" " +
-            "type=\"radio\" " +
-            "x-model=\"submission\" " +
-            "id=\"option_"+ index +"\" " +
-            "value=\""+ letters[index] +"\">" +
-            "<label class=\"form-check-label\" for=\"option_"+ index +"\">" +
-            letters[index] + '. ' +
-            radio[1] +
-            "</label>"
-      } else if (checkbox) {
-        // TODO: some thing wrong, the checkbox checks all automatically.
-        el.innerHTML = "<input class=\"form-check-input\" " +
-            "type=\"checkbox\" " +
-            "name=\"submission\"" +
-            "x-model=\"submission\" " +
-            "id=\"option_"+ index +"\" " +
-            "value=\""+ letters[index] +"\">" +
-            "<label class=\"form-check-label\" for=\"option_"+ index +"\">" +
-            letters[index] + '. ' +
-            checkbox[1] +
-            "</label>"
+    document.querySelectorAll(".challenge-desc ul").forEach((ul, index)=>{
+      foundRadioOrCheckbox = false
+      ul.querySelectorAll(".challenge-desc li").forEach((el, index)=> {
+        radio = el.innerHTML.match(/^\(\s*\)\s*([\w\W]*)$/)
+        checkbox = el.innerHTML.match(/^\[\s*\]\s*([\w\W]*)$/)
+        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+        if (radio) {
+          el.innerHTML = "<input class=\"form-check-input\" " +
+              "type=\"radio\" " +
+              "x-model=\"submission\" " +
+              "id=\"option_" + index + "\" " +
+              "value=\"" + letters[index] + "\">" +
+              "<label class=\"form-check-label\" for=\"option_" + index + "\">" +
+              letters[index] + '. ' +
+              radio[1] +
+              "</label>"
+          el.className = "form-check"
+          foundRadioOrCheckbox = true
+
+        } else if (checkbox) {
+          // TODO: some thing wrong, the checkbox checks all automatically.
+          el.innerHTML = "<input class=\"form-check-input\" " +
+              "type=\"checkbox\" " +
+              "name=\"submission\"" +
+              "x-model=\"submission\" " +
+              "id=\"option_" + index + "\" " +
+              "value=\"" + letters[index] + "\">" +
+              "<label class=\"form-check-label\" for=\"option_" + index + "\">" +
+              letters[index] + '. ' +
+              checkbox[1] +
+              "</label>"
+          el.className = "form-check"
+          foundRadioOrCheckbox = true
+        } else {
+          return false
+        }
+        // el.style.display = "block"
+      })
+      if (foundRadioOrCheckbox) {
+        ul.setAttribute("x-init",'submission=[]')
       }
-      // el.style.display = "block"
-      el.className = "form-check"
     })
   },200);
   // document.querySelector("#challenge-submit").onclick = CTFd._internal.challenge.submit
