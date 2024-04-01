@@ -6,7 +6,8 @@ CTFd._internal.challenge.preRender = function() {
 CTFd._internal.challenge.postRender = function() {
   setTimeout(()=>{
     document.querySelectorAll(".challenge-desc ul").forEach((ul, index)=>{
-      foundRadioOrCheckbox = false
+      foundRadio = false
+      foundCheckbox = false
       ul.querySelectorAll(".challenge-desc li").forEach((el, index)=> {
         radio = el.innerHTML.match(/^\(\s*\)\s*([\w\W]*)$/)
         checkbox = el.innerHTML.match(/^\[\s*\]\s*([\w\W]*)$/)
@@ -23,8 +24,7 @@ CTFd._internal.challenge.postRender = function() {
               radio[1] +
               "</label>"
           el.className = "form-check"
-          foundRadioOrCheckbox = true
-
+          foundRadio = true
         } else if (checkbox) {
           // TODO: some thing wrong, the checkbox checks all automatically.
           el.innerHTML = "<input class=\"form-check-input\" " +
@@ -46,6 +46,9 @@ CTFd._internal.challenge.postRender = function() {
       })
       if (foundRadioOrCheckbox) {
         ul.setAttribute("x-init",'submission=[]')
+      }
+      if (foundRadio) {
+        ul.setAttribute("x-init",'submission=""')
       }
     })
   },200);
