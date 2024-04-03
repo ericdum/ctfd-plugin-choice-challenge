@@ -1,12 +1,13 @@
 from flask import Blueprint
 
-from CTFd.models import Challenges, db, Flags
+from CTFd.models import Challenges, db, Flags, Solves
 from CTFd.plugins import register_plugin_assets_directory
 from CTFd.plugins.challenges import CHALLENGE_CLASSES, BaseChallenge
 from CTFd.plugins.flags import FlagException, get_flag_class
 from CTFd.plugins.dynamic_challenges.decay import DECAY_FUNCTIONS, logarithmic
 from CTFd.plugins.migrations import upgrade
 import json
+from CTFd.utils.user import get_ip
 
 class ChoiceChallengeModel(Challenges):
     __mapper_args__ = {"polymorphic_identity": "choice"}
@@ -71,14 +72,21 @@ class ChoiceChallenge(BaseChallenge):
             return True, 'Correct'
         return False, f"Incorrect ({wrong}), Correct ({correct}), Missing({total-correct})"
 
-    # @classmethod
-    # def solve(cls, user, team, challenge, request):
-    #     super().solve(user, team, challenge, request)
-    #
-    #     (total, correct, wrong) = cls.calc_attemp(challenge, request)
-    #
-    #     challenge.value = challenge.value * (correct-wrong)/total
-    #     db.session.commit()
+    @classmethod
+    def solve(cls, user, team, challenge, request):
+        (total, correct, wrong) = cls.calc_attemp(challenge, request)
+        data = request.form or request.get_json()
+        challenge.value = challenge.value * (correct-wrong)/total
+        solve = Solves(
+            user_id=user.id,
+            team_id=team.id if team else None,
+            challenge_id=challenge.id,
+            ip=get_ip(req=request),
+            provided=json.dumps(data),
+        )
+
+        db.session.add(solve)
+        db.session.commit()
 
 def load(app):
     app.db.create_all()

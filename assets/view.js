@@ -38,13 +38,13 @@ CTFd._internal.challenge.postRender = function() {
               checkbox[1] +
               "</label>"
           el.className = "form-check"
-          foundRadioOrCheckbox = true
+          foundCheckbox = true
         } else {
           return false
         }
         // el.style.display = "block"
       })
-      if (foundRadioOrCheckbox) {
+      if (foundCheckbox) {
         ul.setAttribute("x-init",'submission=[]')
       }
       if (foundRadio) {
