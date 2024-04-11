@@ -1,6 +1,5 @@
 {% extends "challenge.html" %}
 
-
 {% block description %}
     <style>
     .modal-dialog{
@@ -11,5 +10,14 @@
 {% endblock %}
 
 {% block input %}
+    {% if max_attempts > 0 and attempts < max_attempts %}
+      <div class="row text-center">
+        <div class="col-12">
+          <p>
+              本次是第 {{ attempts+1 }} 次提交，如回答正确将得 {{ challenge.value - (attempts * (challenge.value/2)) }} 分
+          </p>
+        </div>
+      </div>
+    {% endif %}
     <input id="challenge-id" class="challenge-id" type="hidden" value="{{ challenge.id }}">
 {% endblock %}
